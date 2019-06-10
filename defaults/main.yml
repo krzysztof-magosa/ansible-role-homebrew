@@ -2,7 +2,7 @@
 homebrew_user: "{{ ansible_user_id }}"
 
 # Group of homebrew files
-homebrew_group: "{{ ansible_user_gid }}"
+homebrew_group: "admin" # "{{ ansible_user_gid }}"
 
 # Directory where homebrew repository is stored
 homebrew_directory: "{{ homebrew_prefix }}/Homebrew"

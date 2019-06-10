@@ -4,6 +4,7 @@
     state: directory
     owner: "{{ homebrew_user }}"
     group: "{{ homebrew_group }}"
+    mode: "0775"
   become: true
 
 - name: Install Homebrew
@@ -29,12 +30,37 @@
     state: directory
     owner: "{{ homebrew_user }}"
     group: "{{ homebrew_group }}"
-    mode: "0755"
+    mode: "0775"
   become: true
   # Create it only if it doesn't exist - to keep /usr/local directory permissions.
   when: not homebrew__prefix_stat.stat.exists
 
-- name: Create prefix subdirectories
+- name: Create prefix subdirectories - user and group writable
+  file:
+    path: "{{ homebrew_prefix }}/{{ item }}"
+    state: directory
+    owner: "{{ homebrew_user }}"
+    group: "{{ homebrew_group }}"
+    mode: "0775"
+  become: true
+  loop:
+    - bin
+    - include
+    - sbin
+    - share
+    - lib/pkgconfig
+    - share/man
+    - share/man/man1
+    - etc
+    - var
+    - opt
+    - var/homebrew
+    - var/homebrew/linked
+    - Cellar
+    - Caskroom
+    - Frameworks
+
+- name: Create prefix subdirectories - user writable
   file:
     path: "{{ homebrew_prefix }}/{{ item }}"
     state: directory
@@ -42,37 +68,9 @@
     group: "{{ homebrew_group }}"
     mode: "0755"
   become: true
-  # Based on https://github.com/Homebrew/install/blob/1a76ada/install#L216-L234
   loop:
-    - bin
-    - etc
-    - include
-    - lib
-    - sbin
-    - share
-    - opt
-    - var
-    - Frameworks
-    - etc/bash_completion.d
-    - lib/pkgconfig
-    - share/aclocal
-    - share/doc
-    - share/info
-    - share/locale
-    - share/man
-    - share/man/man1
-    - share/man/man2
-    - share/man/man3
-    - share/man/man4
-    - share/man/man5
-    - share/man/man6
-    - share/man/man7
-    - share/man/man8
-    - var/log
-    - var/homebrew
-    - var/homebrew/linked
-    - Cellar
-    - Caskroom
+    - share/zsh
+    - share/zsh/site-functions
 
 - name: Symlink brew executable
   file:
