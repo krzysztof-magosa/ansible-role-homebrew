@@ -4,6 +4,9 @@ homebrew_user: "{{ ansible_user_id }}"
 # Group of homebrew files
 homebrew_group: "admin" # "{{ ansible_user_gid }}"
 
+# Permissions for homebrew directories
+homebrew_mode: "0775"
+
 # Directory where homebrew repository is stored
 homebrew_directory: "{{ homebrew_prefix }}/Homebrew"
 

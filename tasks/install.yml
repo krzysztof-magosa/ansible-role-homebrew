@@ -4,7 +4,7 @@
     state: directory
     owner: "{{ homebrew_user }}"
     group: "{{ homebrew_group }}"
-    mode: "0775"
+    mode: "{{ homebrew_mode }}"
   become: true
 
 - name: Install Homebrew
@@ -30,7 +30,7 @@
     state: directory
     owner: "{{ homebrew_user }}"
     group: "{{ homebrew_group }}"
-    mode: "0775"
+    mode: "{{ homebrew_mode }}"
   become: true
   # Create it only if it doesn't exist - to keep /usr/local directory permissions.
   when: not homebrew__prefix_stat.stat.exists
@@ -41,7 +41,7 @@
     state: directory
     owner: "{{ homebrew_user }}"
     group: "{{ homebrew_group }}"
-    mode: "0775"
+    mode: "{{ homebrew_mode }}"
   become: true
   loop:
     - bin
@@ -66,7 +66,7 @@
     state: directory
     owner: "{{ homebrew_user }}"
     group: "{{ homebrew_group }}"
-    mode: "0755"
+    mode: "0755" # this can't be group writable
   become: true
   loop:
     - share/zsh
