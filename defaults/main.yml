@@ -1,5 +1,5 @@
 # Owner of homebrew files
-homebrew_user: "{{ ansible_user_uid }}"
+homebrew_user: "{{ ansible_user_id }}"
 
 # Group of homebrew files
 homebrew_group: "{{ ansible_user_gid }}"

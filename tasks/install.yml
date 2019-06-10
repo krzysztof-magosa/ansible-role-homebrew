@@ -39,9 +39,9 @@
     state: directory
     owner: "{{ homebrew_user }}"
     group: "{{ homebrew_group }}"
-    # mode: "0755"
+    mode: "0755"
   become: true
-  # Based on https://github.com/Homebrew/install/blob/1a76ada/install#L229-L234
+  # Based on https://github.com/Homebrew/install/blob/1a76ada/install#L216-L234
   loop:
     - bin
     - etc
@@ -49,15 +49,27 @@
     - lib
     - sbin
     - share
-    - var
     - opt
-    - share/zsh
-    - share/zsh/site-functions
+    - var
+    - Frameworks
+    - etc/bash_completion.d
+    - lib/pkgconfig
+    - share/aclocal
+    - share/doc
+    - share/info
+    - share/locale
+    - share/man
+    - share/man/man1
+    - share/man/man2
+    - share/man/man3
+    - share/man/man4
+    - share/man/man5
+    - share/man/man6
+    - share/man/man7
+    - share/man/man8
+    - var/log
     - var/homebrew
     - var/homebrew/linked
-    - Cellar
-    - Caskroom
-    - Frameworks
 
 - name: Symlink brew executable
   file:
