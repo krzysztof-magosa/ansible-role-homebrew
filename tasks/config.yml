@@ -1,0 +1,24 @@
+- name: Configure taps
+  homebrew_tap:
+    name: "{{ item.name }}"
+    url: "{{ item.url | default(omit) }}"
+    state: "{{ item.state | default(omit) }}"
+  loop: "{{ homebrew_taps }}"
+
+- name: Configure brews
+  homebrew:
+    name: "{{ item.name }}"
+    options: "{{ item.options | default(omit) }}"
+    path: "{{ homebrew_prefix }}/bin"
+    state: "{{ item.state | default(omit) }}"
+  loop: "{{ homebrew_brews }}"
+
+- name: Configure casks
+  homebrew_cask:
+    name: "{{ item.name }}"
+    options: "{{ item.options | default(omit) }}"
+    path: "{{ homebrew_prefix }}/bin"
+    state: "{{ item.state | default(omit) }}"
+    accept_external_apps: "{{ item.accept_external_apps | default(omit) }}"
+    sudo_password: "{% if ansible_version.full is version_compare('2.8', '>=') %}{{ ansible_become_pass | default(omit) }}{% else %}{{ omit }}{% endif %}"
+  loop: "{{ homebrew_casks }}"

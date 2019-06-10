@@ -1,0 +1,32 @@
+sudo: required
+language: objective-c
+
+matrix:
+  include:
+    - os: osx
+      osx_image: xcode10.2 # Mojave
+      env:
+        ansible_version: 2.8.0
+    - os: osx
+      osx_image: xcode10.1 # High Sierra
+      env:
+        ansible_version: 2.8.0
+
+before_install:
+  - ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)" -- --force
+  - rm -rf /usr/local/{Homebrew,bin/brew}
+
+install:
+  - sudo -H easy_install pip
+  - sudo -H pip install ansible==${ansible_version}
+
+before_script:
+  - mkdir tests/roles
+  - ln -snf $(pwd) tests/roles/homebrew
+
+script:
+  - cd tests
+  - ./test.sh
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/

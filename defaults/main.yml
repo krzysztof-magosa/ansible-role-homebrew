@@ -1,0 +1,30 @@
+# Owner of homebrew files
+homebrew_user: "{{ ansible_user_uid }}"
+
+# Group of homebrew files
+homebrew_group: "{{ ansible_user_gid }}"
+
+# Directory where homebrew repository is stored
+homebrew_directory: "{{ homebrew_prefix }}/Homebrew"
+
+# Directory where applications are installed
+homebrew_prefix: "/usr/local"
+
+# Taps
+homebrew_taps: []
+  # - name: varenc/ffmpeg
+  #   url: https://github.com/varenc/homebrew-ffmpeg # optional
+  #   state: present                                 # optional
+
+# Brews
+homebrew_brews: []
+  # - name: tesseract
+  #   options: all-languages                         # optional
+  #   state: present                                 # optional
+
+# Casks
+homebrew_casks: []
+  # - name: google-chrome
+  #   options: appdir=/Applications                  # optional
+  #   state: present                                 # optional
+  #   accept_external_apps: true                     # optional

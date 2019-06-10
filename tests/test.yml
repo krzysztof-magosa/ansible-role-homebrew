@@ -1,0 +1,10 @@
+- hosts: localhost
+  connection: local
+  roles:
+    - role: homebrew
+      homebrew_taps:
+        - name: varenc/homebrew-ffmpeg
+      homebrew_brews:
+        - name: dockutil
+      homebrew_casks:
+        - name: slack

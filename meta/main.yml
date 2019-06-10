@@ -1,0 +1,15 @@
+galaxy_info:
+  role_name: homebrew
+  author: "Krzysztof Magosa"
+  description: "Installs homebrew"
+  license: "MIT"
+  min_ansible_version: "2.5"
+  platforms:
+    - name: MacOSX
+      versions:
+        - all
+        - any
+  galaxy_tags:
+    - system
+    - packaging
+  dependencies: []

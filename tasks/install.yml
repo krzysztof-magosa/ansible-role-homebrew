@@ -1,0 +1,66 @@
+- name: Create Homebrew directory
+  file:
+    path: "{{ homebrew_directory }}"
+    state: directory
+    owner: "{{ homebrew_user }}"
+    group: "{{ homebrew_group }}"
+  become: true
+
+- name: Install Homebrew
+  git:
+    repo: https://github.com/Homebrew/brew.git
+    dest: "{{ homebrew_directory }}"
+    accept_hostkey: true
+    depth: 1
+    version: master
+    update: false
+  become: "{{ homebrew_user != ansible_user_uid }}"
+  become_user: "{{ homebrew_user }}"
+
+- name: Check if prefix exists
+  stat:
+    path: "{{ homebrew_prefix }}"
+  register: homebrew__prefix_stat
+
+- name: Create prefix when required
+  file:
+    path: "{{ homebrew_prefix }}"
+    state: directory
+    owner: "{{ homebrew_user }}"
+    group: "{{ homebrew_group }}"
+    mode: "0755"
+  become: true
+  # Create it only if it doesn't exist - to keep /usr/local directory permissions.
+  when: not homebrew__prefix_stat.stat.exists
+
+- name: Create prefix subdirectories
+  file:
+    path: "{{ homebrew_prefix }}/{{ item }}"
+    state: directory
+    owner: "{{ homebrew_user }}"
+    group: "{{ homebrew_group }}"
+    mode: "0755"
+  become: true
+  # Based on https://github.com/Homebrew/install/blob/1a76ada/install#L229-L234
+  loop:
+    - bin
+    - etc
+    - include
+    - lib
+    - sbin
+    - share
+    - var
+    - opt
+    - share/zsh
+    - share/zsh/site-functions
+    - var/homebrew
+    - var/homebrew/linked
+    - Cellar
+    - Caskroom
+    - Frameworks
+
+- name: Symlink brew executable
+  file:
+    src: "{{ homebrew_directory }}/bin/brew"
+    dest: "{{ homebrew_prefix }}/bin/brew"
+    state: link
