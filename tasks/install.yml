@@ -71,6 +71,8 @@
     - var/log
     - var/homebrew
     - var/homebrew/linked
+    - Cellar
+    - Caskroom
 
 - name: Symlink brew executable
   file:
