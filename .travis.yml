@@ -14,7 +14,7 @@ matrix:
 
 before_install:
   - ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)" -- --force
-  - sudo rm -rf /usr/local
+  - sudo rm -rf /usr/local/*
 
 install:
   - sudo -H easy_install pip
