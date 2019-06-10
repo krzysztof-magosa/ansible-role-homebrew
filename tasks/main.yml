@@ -1,0 +1,9 @@
+- import_tasks: install.yml
+  tags:
+    - homebrew
+    - homebrew_install
+
+- import_tasks: config.yml
+  tags:
+    - homebrew
+    - homebrew_config

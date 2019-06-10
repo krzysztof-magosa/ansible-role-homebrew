@@ -1,0 +1,85 @@
+- name: Create Homebrew directory
+  file:
+    path: "{{ homebrew_directory }}"
+    state: directory
+    owner: "{{ homebrew_user }}"
+    group: "{{ homebrew_group }}"
+    mode: "{{ homebrew_mode }}"
+  become: true
+
+- name: Install Homebrew
+  git:
+    repo: https://github.com/Homebrew/brew.git
+    dest: "{{ homebrew_directory }}"
+    accept_hostkey: true
+    depth: 1
+    version: master
+    update: false
+  become: "{{ homebrew_user != ansible_user_uid }}"
+  become_user: "{{ homebrew_user }}"
+  register: homebrew__git
+
+- name: Check if prefix exists
+  stat:
+    path: "{{ homebrew_prefix }}"
+  register: homebrew__prefix_stat
+
+- name: Create prefix when required
+  file:
+    path: "{{ homebrew_prefix }}"
+    state: directory
+    owner: "{{ homebrew_user }}"
+    group: "{{ homebrew_group }}"
+    mode: "{{ homebrew_mode }}"
+  become: true
+  # Create it only if it doesn't exist - to keep /usr/local directory permissions.
+  when: not homebrew__prefix_stat.stat.exists
+
+- name: Create prefix subdirectories - user and group writable
+  file:
+    path: "{{ homebrew_prefix }}/{{ item }}"
+    state: directory
+    owner: "{{ homebrew_user }}"
+    group: "{{ homebrew_group }}"
+    mode: "{{ homebrew_mode }}"
+  become: true
+  loop:
+    - bin
+    - include
+    - sbin
+    - share
+    - lib
+    - share/man
+    - share/man/man1
+    - etc
+    - var
+    - opt
+    - var/homebrew
+    - var/homebrew/linked
+    - Cellar
+    - Caskroom
+    - Frameworks
+
+- name: Create prefix subdirectories - user writable
+  file:
+    path: "{{ homebrew_prefix }}/{{ item }}"
+    state: directory
+    owner: "{{ homebrew_user }}"
+    group: "{{ homebrew_group }}"
+    mode: "0755" # this can't be group writable
+  become: true
+  loop:
+    - share/zsh
+    - share/zsh/site-functions
+
+- name: Symlink brew executable
+  file:
+    src: "{{ homebrew_directory }}/bin/brew"
+    dest: "{{ homebrew_prefix }}/bin/brew"
+    state: link
+
+- name: Initial update of brew
+  command: "{{ homebrew_prefix }}/bin/brew update --force"
+  become: "{{ homebrew_user != ansible_user_uid }}"
+  become_user: "{{ homebrew_user }}"
+  when: homebrew__git is changed
