@@ -39,7 +39,7 @@
     state: directory
     owner: "{{ homebrew_user }}"
     group: "{{ homebrew_group }}"
-    mode: "0755"
+    # mode: "0755"
   become: true
   # Based on https://github.com/Homebrew/install/blob/1a76ada/install#L229-L234
   loop:
