@@ -48,7 +48,7 @@
     - include
     - sbin
     - share
-    - lib/pkgconfig
+    - lib
     - share/man
     - share/man/man1
     - etc
